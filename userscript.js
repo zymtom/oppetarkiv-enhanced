@@ -10,7 +10,7 @@
 
 (function() {
     'use strict';
-    
+
     let prevBtn = document.createElement('button');
     prevBtn.appendChild(document.createTextNode('Previous'))
     prevBtn.onclick = onClickPrevious;
@@ -22,6 +22,7 @@
     if (window.location.hash === '#autoplayed') {
         setTimeout(() => {
             eventFire(document.querySelector('.svp_splash__inner'), 'click')
+            eventFire(document.querySelector('.svp_js-controls-btn--fullscreen'), 'click')
         }, 1000);
     }
     setInterval(() => {
@@ -63,7 +64,6 @@ function nextEpisode() {
     let [match, season, episode, seasonLength] = window.location.href.match(/sasong-(\d{1,2})-avsnitt-(\d{1,2})-av-(\d{1,2})/);
     if (parseInt(episode, 10)+1 < seasonLength) {
         return { season: parseInt(season, 10), episode: parseInt(episode, 10)+1 };
-        
     } else {
         return { season: parseInt(season, 10)+1, episode: parseInt(episode, 10) };
     }
@@ -78,7 +78,7 @@ function findEpisode(season, episode, cb) {
         let seasonNode = miniature.children[0];
         let episodeNode = miniature.children[1];
         let link = miniature.children[1].firstChild.href;
-        
+
         let seasonMatch = seasonNode.innerText.match(/Säsong (\d{1,2})/)
         let episodeMatch = episodeNode.innerText.match(/Avsnitt (\d{1,2}) av (\d{1,2})/);
         if (!seasonMatch && !episodeMatch) {
@@ -120,10 +120,10 @@ function findEpisode(season, episode, cb) {
     } else if (season > maxShown.season || (season === maxShown.season && episode > maxShown.episode)) {
         eventFire(loadMore, 'click');
     }
-    
+
     return setTimeout(() => {
         findEpisode(season, episode, cb);
-    }, 1000);    
+    }, 1000);
 }
 
 function eventFire(el, etype){
@@ -135,4 +135,3 @@ function eventFire(el, etype){
     el.dispatchEvent(evObj);
   }
 }
-
